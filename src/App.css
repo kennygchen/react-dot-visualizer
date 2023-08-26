@@ -1,5 +1,11 @@
 .App {
+  display: flex;
+  flex-direction: row;
+}
+
+.App-child {
   text-align: center;
+  border: 1px solid red;
 }
 
 .App-logo {
