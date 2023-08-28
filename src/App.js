@@ -20,8 +20,7 @@ const GraphvizOptions = {
   zoom: true,
 };
 
-function Output() {
-  var dot = "digraph { a -> b;c; d -> c; a -> d; }";
+function Output({ dot }) {
   return (
     <div className="App-child">
       <div>Graph Visualization</div>
@@ -30,13 +29,16 @@ function Output() {
   );
 }
 
-function Input() {
+export default function App() {
+  const [dot, setDot] = useState("digraph { a -> b; c; d -> c; a -> d; }");
   const [fileName, setFileName] = useState("");
+
   const handleFile = (file) => {
     const reader = new FileReader();
     reader.onload = async (file) => {
       const text = file.target.result;
       console.log(text);
+      setDot(text);
       // alert(text);
     };
     reader.readAsText(file);
@@ -44,21 +46,13 @@ function Input() {
   };
 
   return (
-    <div className="App-child">
-      <div>Graphviz Definition</div>
-      <FileUploader handleFile={handleFile} />
-      {fileName ? <p>Uploaded file: {fileName}</p> : null}
-    </div>
-  );
-}
-
-function App() {
-  return (
     <div className="App">
-      <Input />
-      <Output />
+      <div className="App-child">
+        <div>Graphviz Definition</div>
+        <FileUploader handleFile={handleFile} />
+        {fileName ? <p>Uploaded file: {fileName}</p> : null}
+      </div>
+      <Output dot={dot} />
     </div>
   );
 }
-
-export default App;
