@@ -15,7 +15,7 @@ export const FileUploader = ({ handleFile }) => {
   return (
     <>
       <button className="button-upload" onClick={handleClick}>
-        Choose a DOT file
+        Choose a file
       </button>
       <input
         type="file"

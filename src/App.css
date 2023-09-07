@@ -3,8 +3,14 @@
   flex-direction: row;
 }
 
-.App-child {
-  width: 50%;
+.App-input {
+  width: 20%;
+  text-align: center;
+  border: 1px solid red;
+}
+
+.App-output {
+  width: 80%;
   text-align: center;
   border: 1px solid red;
 }
