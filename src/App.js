@@ -43,7 +43,14 @@ function Output({ data }) {
   return (
     <div className="App-output">
       <div>Graph Visualization</div>
-      <ForceGraph3D className="graph" graphData={data} />
+      <ForceGraph3D
+        className="graph"
+        graphData={data}
+        nodeId="_gvid"
+        nodeLabel="name"
+        linkSource="tail"
+        linkTarget="head"
+      />
       {/* <Graphviz className="graph" options={GraphvizOptions} dot={dot} /> */}
     </div>
   );
