@@ -50,16 +50,16 @@ function Output({ data }) {
 }
 
 export default function App() {
-  // const [myData, setMyData] = useState(data);
-  const [data, setData] = useState(genRandomTree());
+  const [data, setData] = useState(genRandomTree(20));
   const [fileName, setFileName] = useState("");
 
   const handleFile = (file) => {
     const reader = new FileReader();
     reader.onload = async (file) => {
       const text = file.target.result;
-      console.log(text);
-      setData(text);
+      var json = JSON.parse(text);
+      console.log(json);
+      setData(json);
       // alert(text);
     };
     reader.readAsText(file);
@@ -69,7 +69,7 @@ export default function App() {
   return (
     <div className="App">
       <div className="App-input">
-        <div>Graphviz Definition</div>
+        <div>Definition</div>
         <FileUploader handleFile={handleFile} />
         {fileName ? <p>Uploaded file: {fileName}</p> : null}
       </div>
