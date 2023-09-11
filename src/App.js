@@ -29,12 +29,12 @@ const GraphvizOptions = {
 
 function genRandomTree(N = 300, reverse = false) {
   return {
-    nodes: [...Array(N).keys()].map((i) => ({ id: i })),
+    nodes: [...Array(N).keys()].map((i) => ({ key: i })),
     links: [...Array(N).keys()]
-      .filter((id) => id)
-      .map((id) => ({
-        [reverse ? "target" : "source"]: id,
-        [reverse ? "source" : "target"]: Math.round(Math.random() * (id - 1)),
+      .filter((key) => key)
+      .map((key) => ({
+        [reverse ? "target" : "source"]: key,
+        [reverse ? "source" : "target"]: Math.round(Math.random() * (key - 1)),
       })),
   };
 }
@@ -46,10 +46,10 @@ function Output({ data }) {
       <ForceGraph3D
         className="graph"
         graphData={data}
-        nodeId="_gvid"
-        nodeLabel="name"
-        linkSource="tail"
-        linkTarget="head"
+        nodeId="key"
+        nodeLabel="key"
+        linkSource="source"
+        linkTarget="target"
       />
       {/* <Graphviz className="graph" options={GraphvizOptions} dot={dot} /> */}
     </div>
@@ -57,7 +57,7 @@ function Output({ data }) {
 }
 
 export default function App() {
-  const [data, setData] = useState(genRandomTree(20));
+  const [data, setData] = useState(genRandomTree());
   const [fileName, setFileName] = useState("");
 
   const handleFile = (file) => {
