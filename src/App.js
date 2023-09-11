@@ -9,6 +9,7 @@ import {
   ForceGraphAR,
 } from "react-force-graph";
 import miserables from "./dataset/miserables.json";
+import gdot from "./dataset/gdot new.json";
 
 const GraphvizOptions = {
   // height: Math.floor(innerHeight * 0.7),
@@ -47,9 +48,11 @@ function Output({ data }) {
         className="graph"
         graphData={data}
         nodeId="key"
-        nodeLabel="key"
+        nodeLabel={(d) => d.attributes.label}
         linkSource="source"
         linkTarget="target"
+        nodeAutoColorBy={(d) => d.attributes.modularity_class}
+        linkWidth={1}
       />
       {/* <Graphviz className="graph" options={GraphvizOptions} dot={dot} /> */}
     </div>
@@ -57,7 +60,7 @@ function Output({ data }) {
 }
 
 export default function App() {
-  const [data, setData] = useState(genRandomTree());
+  const [data, setData] = useState(gdot);
   const [fileName, setFileName] = useState("");
 
   const handleFile = (file) => {
