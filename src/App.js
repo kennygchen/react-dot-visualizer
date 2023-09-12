@@ -1,7 +1,7 @@
 import "./App.css";
 import { Graphviz } from "graphviz-react";
 import { FileUploader } from "./FileUploader";
-import { useState } from "react";
+import { useMemo, useState, useCallback } from "react";
 import {
   ForceGraph2D,
   ForceGraph3D,
@@ -10,37 +10,56 @@ import {
 } from "react-force-graph";
 import miserables from "./dataset/miserables.json";
 import gdot from "./dataset/gdot new.json";
+import { color } from "d3";
 
-const GraphvizOptions = {
-  // height: Math.floor(innerHeight * 0.7),
-  width: 1200,
-  scale: 1,
-  tweenPrecision: 1,
-  engine: "dot",
-  keyMode: "title",
-  convertEqualSidedPolygons: false,
-  fade: true,
-  growEnteringEdges: false,
-  fit: false,
-  tweenPaths: false,
-  tweenShapes: false,
-  useWorker: false,
-  zoom: true,
-};
+function Output({ input }) {
+  const NODE_R = 6;
+  const [highlightNodes, setHighlightNodes] = useState(new Set());
+  const [highlightLinks, setHighlightLinks] = useState(new Set());
+  const [hoverNode, setHoverNode] = useState(null);
 
-function genRandomTree(N = 300, reverse = false) {
-  return {
-    nodes: [...Array(N).keys()].map((i) => ({ key: i })),
-    links: [...Array(N).keys()]
-      .filter((key) => key)
-      .map((key) => ({
-        [reverse ? "target" : "source"]: key,
-        [reverse ? "source" : "target"]: Math.round(Math.random() * (key - 1)),
-      })),
+  const data = useMemo(() => {
+    const gData = input;
+
+    // cross-link node objects
+    gData.links.forEach((link) => {
+      const source = gData.nodes.find((node) => node.key == link.source);
+      const target = gData.nodes.find((node) => node.key == link.target);
+
+      !source.neighbors && (source.neighbors = []);
+      !target.neighbors && (target.neighbors = []);
+      source.neighbors.push(target);
+      target.neighbors.push(source);
+      !source.links && (source.links = []);
+      !target.links && (target.links = []);
+      source.links.push(link);
+      target.links.push(link);
+    });
+
+    return gData;
+  }, []);
+
+  const updateHighlight = () => {
+    setHighlightNodes(highlightNodes);
+    setHighlightLinks(highlightLinks);
   };
-}
 
-function Output({ data }) {
+  const handleNodeHover = (node) => {
+    highlightNodes.clear();
+    highlightLinks.clear();
+    if (node) {
+      highlightNodes.add(node);
+      node.neighbors.forEach((neighbor) => highlightNodes.add(neighbor));
+      node.links.forEach((link) => highlightLinks.add(link));
+    }
+    setHoverNode(node || null);
+    updateHighlight();
+  };
+
+  const handleLinkHover = (link) => {
+    // console.log(link);
+  };
+
   return (
     <div className="App-output">
       <div>Graph Visualization</div>
@@ -49,12 +68,19 @@ function Output({ data }) {
         graphData={data}
         nodeId="key"
         nodeLabel={(d) => d.attributes.label}
+        nodeRelSize={NODE_R}
         linkSource="source"
         linkTarget="target"
         nodeAutoColorBy={(d) => d.attributes.modularity_class}
-        linkWidth={1}
+        linkAutoColorBy={(d) => d.source}
+        linkDirectionalParticles={4}
+        linkDirectionalParticleWidth={(link) =>
+          highlightLinks.has(link) ? 2 : 0
+        }
+        linkWidth={(link) => (highlightLinks.has(link) ? 3 : 1)}
+        onNodeHover={handleNodeHover}
+        onLinkHover={handleLinkHover}
       />
-      {/* <Graphviz className="graph" options={GraphvizOptions} dot={dot} /> */}
     </div>
   );
 }
@@ -83,7 +109,7 @@ export default function App() {
         <FileUploader handleFile={handleFile} />
         {fileName ? <p>Uploaded file: {fileName}</p> : null}
       </div>
-      <Output data={data} />
+      <Output input={data} />
     </div>
   );
 }
