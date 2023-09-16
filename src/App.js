@@ -1,7 +1,7 @@
 import "./App.css";
 import { Graphviz } from "graphviz-react";
 import { FileUploader } from "./FileUploader";
-import { useMemo, useState, useCallback } from "react";
+import { useMemo, useState, useCallback, useRef } from "react";
 import {
   ForceGraph2D,
   ForceGraph3D,
@@ -11,6 +11,7 @@ import {
 import miserables from "./dataset/miserables.json";
 import gdot from "./dataset/gdot new.json";
 import { color } from "d3";
+import * as THREE from "three";
 
 function Output({ input }) {
   const NODE_R = 6;
@@ -60,6 +61,8 @@ function Output({ input }) {
     // console.log(link);
   };
 
+  const handleNodeClick = (node) => {};
+
   return (
     <div className="App-output">
       <div>Graph Visualization</div>
@@ -67,12 +70,24 @@ function Output({ input }) {
         className="graph"
         graphData={data}
         nodeId="key"
-        nodeLabel={(d) => d.attributes.label}
+        nodeLabel={(node) => node.attributes.label}
         nodeRelSize={NODE_R}
+        nodeAutoColorBy={(node) => node.attributes.modularity_class}
+        nodeThreeObject={(node) =>
+          node.attributes.MemoryObject != "null"
+            ? new THREE.Mesh(
+                new THREE.BoxGeometry(0.7 * 20, 0.7 * 20, 0.7 * 20),
+                new THREE.MeshLambertMaterial({
+                  color: "#16A0D4",
+                  transparent: true,
+                  opacity: 0.75,
+                })
+              )
+            : console.log("hi")
+        }
         linkSource="source"
         linkTarget="target"
-        nodeAutoColorBy={(d) => d.attributes.modularity_class}
-        linkAutoColorBy={(d) => d.source}
+        linkAutoColorBy={(link) => link.source}
         linkDirectionalParticles={4}
         linkDirectionalParticleWidth={(link) =>
           highlightLinks.has(link) ? 2 : 0
@@ -80,10 +95,41 @@ function Output({ input }) {
         linkWidth={(link) => (highlightLinks.has(link) ? 3 : 1)}
         onNodeHover={handleNodeHover}
         onLinkHover={handleLinkHover}
+        onNodeClick={handleNodeClick}
       />
     </div>
   );
 }
+
+// <ForceGraphVR
+//   graphData={genRandomTree(100)}
+//   nodeThreeObject={({ id }) =>
+//     new THREE.Mesh(
+//       [
+//         new THREE.BoxGeometry(
+//           Math.random() * 20,
+//           Math.random() * 20,
+//           Math.random() * 20
+//         ),
+//         new THREE.ConeGeometry(Math.random() * 10, Math.random() * 20),
+//         new THREE.CylinderGeometry(
+//           Math.random() * 10,
+//           Math.random() * 10,
+//           Math.random() * 20
+//         ),
+//         new THREE.DodecahedronGeometry(Math.random() * 10),
+//         new THREE.SphereGeometry(Math.random() * 10),
+//         new THREE.TorusGeometry(Math.random() * 10, Math.random() * 2),
+//         new THREE.TorusKnotGeometry(Math.random() * 10, Math.random() * 2),
+//       ][id % 7],
+//       new THREE.MeshLambertMaterial({
+//         color: Math.round(Math.random() * Math.pow(2, 24)),
+//         transparent: true,
+//         opacity: 0.75,
+//       })
+//     )
+//   }
+// />;
 
 export default function App() {
   const [data, setData] = useState(gdot);
