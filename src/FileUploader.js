@@ -1,7 +1,7 @@
 import { useRef } from "react";
 import "./App.css";
 
-export const FileUploader = ({ handleFile }) => {
+const FileUploader = ({ handleFile }) => {
   const hiddenFileInput = useRef(null);
 
   const handleClick = (event) => {
@@ -26,3 +26,5 @@ export const FileUploader = ({ handleFile }) => {
     </>
   );
 };
+
+export default FileUploader;

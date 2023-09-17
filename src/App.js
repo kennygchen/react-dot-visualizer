@@ -1,16 +1,10 @@
 import "./App.css";
-import { Graphviz } from "graphviz-react";
-import { FileUploader } from "./FileUploader";
+import FileUploader from "./FileUploader";
+import PopUp from "./PopUp";
 import { useMemo, useState, useCallback, useRef } from "react";
-import {
-  ForceGraph2D,
-  ForceGraph3D,
-  ForceGraphVR,
-  ForceGraphAR,
-} from "react-force-graph";
+import { ForceGraph3D } from "react-force-graph";
 import miserables from "./dataset/miserables.json";
 import gdot from "./dataset/gdot new.json";
-import { color } from "d3";
 import * as THREE from "three";
 
 function Output({ input }) {
@@ -18,6 +12,7 @@ function Output({ input }) {
   const [highlightNodes, setHighlightNodes] = useState(new Set());
   const [highlightLinks, setHighlightLinks] = useState(new Set());
   const [hoverNode, setHoverNode] = useState(null);
+  const [popUp, setPopUp] = useState(false);
 
   const data = useMemo(() => {
     const gData = input;
@@ -46,7 +41,6 @@ function Output({ input }) {
   };
 
   const handleNodeHover = (node) => {
-    console.log(node);
     highlightNodes.clear();
     highlightLinks.clear();
     if (node) {
@@ -58,15 +52,14 @@ function Output({ input }) {
     updateHighlight();
   };
 
-  const handleLinkHover = (link) => {
-    // console.log(link);
+  const handleLinkHover = (link) => {};
+
+  const handleNodeClick = (node) => {
+    setPopUp(!popUp);
   };
 
-  const handleNodeClick = (node) => {};
-
   return (
-    <div className="App-output">
-      <div>Graph Visualization</div>
+    <div>
       <ForceGraph3D
         className="graph"
         graphData={data}
@@ -77,7 +70,7 @@ function Output({ input }) {
         nodeThreeObject={(node) =>
           node.attributes.MemoryObject != "null"
             ? new THREE.Mesh(
-                new THREE.BoxGeometry(10, 10, 10),
+                new THREE.BoxGeometry(15, 15, 15),
                 new THREE.MeshStandardMaterial({
                   color: node.color,
                   transparent: true,
@@ -99,39 +92,10 @@ function Output({ input }) {
         onLinkHover={handleLinkHover}
         onNodeClick={handleNodeClick}
       />
+      <PopUp open={popUp} onClose={() => setPopUp(false)} />
     </div>
   );
 }
-
-// <ForceGraphVR
-//   graphData={genRandomTree(100)}
-//   nodeThreeObject={({ id }) =>
-//     new THREE.Mesh(
-//       [
-//         new THREE.BoxGeometry(
-//           Math.random() * 20,
-//           Math.random() * 20,
-//           Math.random() * 20
-//         ),
-//         new THREE.ConeGeometry(Math.random() * 10, Math.random() * 20),
-//         new THREE.CylinderGeometry(
-//           Math.random() * 10,
-//           Math.random() * 10,
-//           Math.random() * 20
-//         ),
-//         new THREE.DodecahedronGeometry(Math.random() * 10),
-//         new THREE.SphereGeometry(Math.random() * 10),
-//         new THREE.TorusGeometry(Math.random() * 10, Math.random() * 2),
-//         new THREE.TorusKnotGeometry(Math.random() * 10, Math.random() * 2),
-//       ][id % 7],
-//       new THREE.MeshLambertMaterial({
-//         color: Math.round(Math.random() * Math.pow(2, 24)),
-//         transparent: true,
-//         opacity: 0.75,
-//       })
-//     )
-//   }
-// />;
 
 export default function App() {
   const [data, setData] = useState(gdot);
@@ -151,12 +115,12 @@ export default function App() {
   };
 
   return (
-    <div className="App">
-      <div className="App-input">
+    <div>
+      {/* <div className="App-input">
         <div>Definition</div>
         <FileUploader handleFile={handleFile} />
         {fileName ? <p>Uploaded file: {fileName}</p> : null}
-      </div>
+      </div> */}
       <Output input={data} />
     </div>
   );
