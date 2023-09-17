@@ -1,18 +1,20 @@
 import "./App.css";
 import FileUploader from "./FileUploader";
 import PopUp from "./PopUp";
+import GenerateSubgraph from "./GenerateSubgraph";
 import { useMemo, useState, useCallback, useRef } from "react";
 import { ForceGraph3D } from "react-force-graph";
-import miserables from "./dataset/miserables.json";
 import gdot from "./dataset/gdot new.json";
 import * as THREE from "three";
 
 function Output({ input }) {
+  const fgRef = useRef();
   const NODE_R = 6;
   const [highlightNodes, setHighlightNodes] = useState(new Set());
   const [highlightLinks, setHighlightLinks] = useState(new Set());
   const [hoverNode, setHoverNode] = useState(null);
   const [popUp, setPopUp] = useState(false);
+  const [subgraphData, setSubgraphData] = useState();
 
   const data = useMemo(() => {
     const gData = input;
@@ -31,6 +33,18 @@ function Output({ input }) {
       source.links.push(link);
       target.links.push(link);
     });
+
+    var memoryObjects = {};
+
+    gData.nodes.forEach((node) => {
+      const memoryObjectKey = node.attributes.MemoryObject;
+      if (memoryObjectKey != "null") {
+        !memoryObjects[memoryObjectKey] && (memoryObjects[memoryObjectKey] = []);
+        memoryObjects[memoryObjectKey].push(node);
+      }
+    });
+
+    GenerateSubgraph(gData, memoryObjects);
 
     return gData;
   }, []);
@@ -55,12 +69,22 @@ function Output({ input }) {
   const handleLinkHover = (link) => {};
 
   const handleNodeClick = (node) => {
-    setPopUp(true);
+    if (node.attributes.MemoryObject != "null") {
+      setPopUp(true);
+      setSubgraphData(node.subgraph);
+      fgRef.current.pauseAnimation();
+    }
+  };
+
+  const handleOnClose = () => {
+    setPopUp(false);
+    fgRef.current.resumeAnimation();
   };
 
   return (
     <div className="container">
       <ForceGraph3D
+        ref={fgRef}
         graphData={data}
         nodeId="key"
         nodeLabel={(node) => node.attributes.label}
@@ -83,15 +107,13 @@ function Output({ input }) {
         linkTarget="target"
         linkAutoColorBy={(link) => link.source}
         linkDirectionalParticles={4}
-        linkDirectionalParticleWidth={(link) =>
-          highlightLinks.has(link) ? 2 : 0
-        }
+        linkDirectionalParticleWidth={(link) => (highlightLinks.has(link) ? 2 : 0)}
         linkWidth={(link) => (highlightLinks.has(link) ? 3 : 1)}
         onNodeHover={handleNodeHover}
         onLinkHover={handleLinkHover}
         onNodeClick={handleNodeClick}
       />
-      <PopUp className="overlay" open={popUp} onClose={() => setPopUp(false)} />
+      <PopUp className="overlay" open={popUp} onClose={handleOnClose} data={subgraphData} />
     </div>
   );
 }
