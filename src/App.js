@@ -46,6 +46,7 @@ function Output({ input }) {
   };
 
   const handleNodeHover = (node) => {
+    console.log(node);
     highlightNodes.clear();
     highlightLinks.clear();
     if (node) {
@@ -76,14 +77,15 @@ function Output({ input }) {
         nodeThreeObject={(node) =>
           node.attributes.MemoryObject != "null"
             ? new THREE.Mesh(
-                new THREE.BoxGeometry(0.7 * 20, 0.7 * 20, 0.7 * 20),
-                new THREE.MeshLambertMaterial({
-                  color: "#16A0D4",
+                new THREE.BoxGeometry(10, 10, 10),
+                new THREE.MeshStandardMaterial({
+                  color: node.color,
                   transparent: true,
                   opacity: 0.75,
+                  emissive: "#a1a1a1",
                 })
               )
-            : console.log("hi")
+            : false
         }
         linkSource="source"
         linkTarget="target"
