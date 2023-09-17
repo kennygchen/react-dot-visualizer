@@ -55,13 +55,12 @@ function Output({ input }) {
   const handleLinkHover = (link) => {};
 
   const handleNodeClick = (node) => {
-    setPopUp(!popUp);
+    setPopUp(true);
   };
 
   return (
-    <div>
+    <div className="container">
       <ForceGraph3D
-        className="graph"
         graphData={data}
         nodeId="key"
         nodeLabel={(node) => node.attributes.label}
@@ -92,7 +91,7 @@ function Output({ input }) {
         onLinkHover={handleLinkHover}
         onNodeClick={handleNodeClick}
       />
-      <PopUp open={popUp} onClose={() => setPopUp(false)} />
+      <PopUp className="overlay" open={popUp} onClose={() => setPopUp(false)} />
     </div>
   );
 }

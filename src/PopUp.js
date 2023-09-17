@@ -4,16 +4,18 @@ import genRandomTree from "./dataset/random-data";
 const PopUp = ({ open, onClose }) => {
   if (!open) return null;
   return (
-    <div className="overlay">
-      <p onClick={onClose} className="clossBtn">
-        X
+    <div className="pop-up-container">
+      <p onClick={onClose} className="close-btn">
+        +
       </p>
-      <ForceGraph3D
-        graphData={genRandomTree(10)}
-        backgroundColor="#090c33"
-        width={1100}
-        height={600}
-      />
+      <div className="pop-up-graph">
+        <ForceGraph3D
+          graphData={genRandomTree(10)}
+          width={1250}
+          height={750}
+          showNavInfo={false}
+        />
+      </div>
     </div>
   );
 };
