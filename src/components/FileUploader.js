@@ -1,5 +1,4 @@
 import { useRef } from "react";
-import "./App.css";
 
 const FileUploader = ({ handleFile }) => {
   const hiddenFileInput = useRef(null);

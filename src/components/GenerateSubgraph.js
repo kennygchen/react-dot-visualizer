@@ -1,4 +1,4 @@
-function GenerateSubgraph(gData, memoryObjects, want, N = 5) {
+function GenerateSubgraph(gData, memoryObjects) {
   for (let k in memoryObjects) {
     var parentNode = gData.nodes.find((node) => node.key === k);
     if (!parentNode) {

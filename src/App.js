@@ -1,10 +1,10 @@
 import "./App.css";
-import FileUploader from "./FileUploader";
-import PopUp from "./PopUp";
-import GenerateSubgraph from "./GenerateSubgraph";
-import { useMemo, useState, useRef } from "react";
+// import FileUploader from "./components/FileUploader";
+import PopUp from "./components/PopUp";
+import GenerateSubgraph from "./components/GenerateSubgraph";
+import { useMemo, useState, useRef, useCallback } from "react";
 import { ForceGraph3D } from "react-force-graph";
-import gdot from "./dataset/gdot new.json";
+import gdot from "./datasets/gdot.json";
 import * as THREE from "three";
 
 function Output({ input }) {
@@ -66,13 +66,24 @@ function Output({ input }) {
     updateHighlight();
   };
 
-  const handleNodeClick = (node) => {
-    if (node.attributes.MemoryObject !== "null") {
-      setPopUp(true);
-      setSubgraphData(node.subgraph);
-      fgRef.current.pauseAnimation();
-    }
-  };
+  const handleNodeClick = useCallback(
+    (node) => {
+      if (node.attributes.MemoryObject !== "null") {
+        setPopUp(true);
+        setSubgraphData(node.subgraph);
+        fgRef.current.pauseAnimation();
+      } else {
+        const distance = 200;
+        const distRatio = 1 + distance / Math.hypot(node.x, node.y, node.z);
+        fgRef.current.cameraPosition(
+          { x: node.x * distRatio, y: node.y * distRatio, z: -node.z * distRatio }, // new position
+          node, // lookAt ({ x, y, z })
+          3000 // ms transition duration
+        );
+      }
+    },
+    [fgRef]
+  );
 
   const handleOnClose = () => {
     setPopUp(false);
@@ -110,7 +121,7 @@ function Output({ input }) {
         onNodeHover={handleNodeHover}
         onNodeClick={handleNodeClick}
       />
-      <PopUp className="overlay" open={popUp} onClose={handleOnClose} data={subgraphData} />
+      <PopUp className="overlay" trigger={popUp} onClose={handleOnClose} data={subgraphData} />
     </div>
   );
 }
@@ -126,7 +137,6 @@ export default function App() {
       var json = JSON.parse(text);
       console.log(json);
       setData(json);
-      // alert(text);
     };
     reader.readAsText(file);
     setFileName(file.name);
