@@ -2,6 +2,7 @@ import "./App.css";
 // import FileUploader from "./components/FileUploader";
 import PopUp from "./components/PopUp";
 import GenerateSubgraph from "./components/GenerateSubgraph";
+import OverlayInfo from "./components/OverlayInfo";
 import { useMemo, useState, useRef, useCallback } from "react";
 import { ForceGraph3D } from "react-force-graph";
 import gdot from "./datasets/gdot.json";
@@ -92,6 +93,7 @@ function Output({ input }) {
 
   return (
     <div className="container">
+      <OverlayInfo node={hoverNode} />
       <ForceGraph3D
         ref={fgRef}
         graphData={data}
@@ -121,7 +123,7 @@ function Output({ input }) {
         onNodeHover={handleNodeHover}
         onNodeClick={handleNodeClick}
       />
-      <PopUp className="overlay" trigger={popUp} onClose={handleOnClose} data={subgraphData} />
+      <PopUp trigger={popUp} onClose={handleOnClose} data={subgraphData} />
     </div>
   );
 }

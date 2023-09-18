@@ -1,6 +1,6 @@
 import { useRef } from "react";
 
-const FileUploader = ({ handleFile }) => {
+export default function FileUploader({ handleFile }) {
   const hiddenFileInput = useRef(null);
 
   const handleClick = (event) => {
@@ -24,6 +24,4 @@ const FileUploader = ({ handleFile }) => {
       />
     </>
   );
-};
-
-export default FileUploader;
+}

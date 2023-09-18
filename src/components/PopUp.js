@@ -1,6 +1,6 @@
 import { ForceGraph3D } from "react-force-graph";
 
-function PopUp({ trigger, onClose, data }) {
+export default function PopUp({ trigger, onClose, data }) {
   return trigger ? (
     <div className="pop-up-container">
       <p onClick={onClose} className="close-btn">
@@ -28,5 +28,3 @@ function PopUp({ trigger, onClose, data }) {
     ""
   );
 }
-
-export default PopUp;

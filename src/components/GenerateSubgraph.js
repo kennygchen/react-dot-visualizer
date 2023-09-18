@@ -1,4 +1,4 @@
-function GenerateSubgraph(gData, memoryObjects) {
+export default function GenerateSubgraph(gData, memoryObjects) {
   for (let k in memoryObjects) {
     var parentNode = gData.nodes.find((node) => node.key === k);
     if (!parentNode) {
@@ -40,5 +40,3 @@ function GenerateSubgraph(gData, memoryObjects) {
     }
   }
 }
-
-export default GenerateSubgraph;

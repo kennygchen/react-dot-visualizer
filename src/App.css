@@ -51,3 +51,16 @@
   font-weight: 500;
   transform: rotate(45deg);
 }
+
+.overlay-container {
+  position: absolute;
+  width: 550px;
+  border-radius: 25px;
+  margin: 10px;
+  padding: 15px;
+  background: black;
+  border: 1px solid white;
+  color: white;
+  opacity: 85%;
+  z-index: 5;
+}
