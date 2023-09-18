@@ -2,7 +2,7 @@ import "./App.css";
 import FileUploader from "./FileUploader";
 import PopUp from "./PopUp";
 import GenerateSubgraph from "./GenerateSubgraph";
-import { useMemo, useState, useCallback, useRef } from "react";
+import { useMemo, useState, useRef } from "react";
 import { ForceGraph3D } from "react-force-graph";
 import gdot from "./dataset/gdot new.json";
 import * as THREE from "three";
@@ -21,8 +21,8 @@ function Output({ input }) {
 
     // cross-link node objects
     gData.links.forEach((link) => {
-      const source = gData.nodes.find((node) => node.key == link.source);
-      const target = gData.nodes.find((node) => node.key == link.target);
+      const source = gData.nodes.find((node) => node.key === link.source);
+      const target = gData.nodes.find((node) => node.key === link.target);
 
       !source.neighbors && (source.neighbors = []);
       !target.neighbors && (target.neighbors = []);
@@ -38,7 +38,7 @@ function Output({ input }) {
 
     gData.nodes.forEach((node) => {
       const memoryObjectKey = node.attributes.MemoryObject;
-      if (memoryObjectKey != "null") {
+      if (memoryObjectKey !== "null") {
         !memoryObjects[memoryObjectKey] && (memoryObjects[memoryObjectKey] = []);
         memoryObjects[memoryObjectKey].push(node);
       }
@@ -66,10 +66,8 @@ function Output({ input }) {
     updateHighlight();
   };
 
-  const handleLinkHover = (link) => {};
-
   const handleNodeClick = (node) => {
-    if (node.attributes.MemoryObject != "null") {
+    if (node.attributes.MemoryObject !== "null") {
       setPopUp(true);
       setSubgraphData(node.subgraph);
       fgRef.current.pauseAnimation();
@@ -91,7 +89,7 @@ function Output({ input }) {
         nodeRelSize={NODE_R}
         nodeAutoColorBy={(node) => node.attributes.modularity_class}
         nodeThreeObject={(node) =>
-          node.attributes.MemoryObject != "null"
+          node.attributes.MemoryObject !== "null"
             ? new THREE.Mesh(
                 new THREE.BoxGeometry(15, 15, 15),
                 new THREE.MeshStandardMaterial({
@@ -110,7 +108,6 @@ function Output({ input }) {
         linkDirectionalParticleWidth={(link) => (highlightLinks.has(link) ? 2 : 0)}
         linkWidth={(link) => (highlightLinks.has(link) ? 3 : 1)}
         onNodeHover={handleNodeHover}
-        onLinkHover={handleLinkHover}
         onNodeClick={handleNodeClick}
       />
       <PopUp className="overlay" open={popUp} onClose={handleOnClose} data={subgraphData} />

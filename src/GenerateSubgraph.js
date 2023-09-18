@@ -1,6 +1,6 @@
 function GenerateSubgraph(gData, memoryObjects, want, N = 5) {
   for (let k in memoryObjects) {
-    var parentNode = gData.nodes.find((node) => node.key == k);
+    var parentNode = gData.nodes.find((node) => node.key === k);
     if (!parentNode) {
       parentNode = {
         key: k,
@@ -17,7 +17,15 @@ function GenerateSubgraph(gData, memoryObjects, want, N = 5) {
       links: [],
     };
     for (let i in memoryObjects[k]) {
-      var childNode = memoryObjects[k][i];
+      var childNode = {
+        key: memoryObjects[k][i].key,
+        attributes: {
+          label: memoryObjects[k][i].attributes.label,
+          modularity_class: memoryObjects[k][i].attributes.modularity_class,
+          MemoryObject: memoryObjects[k][i].attributes.MemoryObject,
+          Offset: memoryObjects[k][i].attributes.Offset,
+        },
+      };
       var childLink = {
         key: memoryObjects[k][i].key,
         source: parentNode.key,
