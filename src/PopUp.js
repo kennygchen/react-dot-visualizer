@@ -30,6 +30,9 @@ const PopUp = ({ open, onClose, data }) => {
             linkSource="source"
             linkTarget="target"
             linkWidth={1}
+            linkAutoColorBy={(link) => link.source}
+            linkDirectionalParticles={3}
+            linkDirectionalParticleWidth={1}
             width={1250}
             height={750}
             showNavInfo={false}
