@@ -14,6 +14,7 @@ function Output({ input }) {
   const [highlightNodes, setHighlightNodes] = useState(new Set());
   const [highlightLinks, setHighlightLinks] = useState(new Set());
   const [hoverNode, setHoverNode] = useState(null);
+  const [clickNode, setClickNode] = useState(null);
   const [popUp, setPopUp] = useState(false);
   const [subgraphData, setSubgraphData] = useState();
 
@@ -67,21 +68,25 @@ function Output({ input }) {
     updateHighlight();
   };
 
-  const handleNodeClick = useCallback(
+  const handleNodeClick = (node) => {
+    setClickNode(node);
+    if (node.attributes.MemoryObject !== "null") {
+      setPopUp(true);
+      setSubgraphData(node.subgraph);
+      fgRef.current.pauseAnimation();
+    }
+  };
+
+  const handleNodeRightClick = useCallback(
     (node) => {
-      if (node.attributes.MemoryObject !== "null") {
-        setPopUp(true);
-        setSubgraphData(node.subgraph);
-        fgRef.current.pauseAnimation();
-      } else {
-        const distance = 200;
-        const distRatio = 1 + distance / Math.hypot(node.x, node.y, node.z);
-        fgRef.current.cameraPosition(
-          { x: node.x * distRatio, y: node.y * distRatio, z: -node.z * distRatio }, // new position
-          node, // lookAt ({ x, y, z })
-          3000 // ms transition duration
-        );
-      }
+      setClickNode(node);
+      const distance = 300;
+      const distRatio = 1 + distance / Math.hypot(node.x, node.y, node.z);
+      fgRef.current.cameraPosition(
+        { x: node.x * distRatio, y: node.y * distRatio, z: node.z * distRatio }, // new position
+        node, // lookAt ({ x, y, z })
+        2000 // ms transition duration
+      );
     },
     [fgRef]
   );
@@ -93,7 +98,7 @@ function Output({ input }) {
 
   return (
     <div className="container">
-      <OverlayInfo node={hoverNode} />
+      <OverlayInfo node={clickNode} />
       <ForceGraph3D
         ref={fgRef}
         graphData={data}
@@ -122,6 +127,7 @@ function Output({ input }) {
         linkWidth={(link) => (highlightLinks.has(link) ? 3 : 1)}
         onNodeHover={handleNodeHover}
         onNodeClick={handleNodeClick}
+        onNodeRightClick={handleNodeRightClick}
       />
       <PopUp trigger={popUp} onClose={handleOnClose} data={subgraphData} />
     </div>
