@@ -1,6 +1,8 @@
 import { ForceGraph3D } from "react-force-graph";
+import genRandomTree from "../datasets/random-data";
+import GenerateSubgraph from "./GenerateSubgraph";
 
-export default function PopUp({ trigger, onClose, data }) {
+export default function PopUp({ trigger, onClose, node }) {
   return trigger ? (
     <div className="pop-up-container">
       <p onClick={onClose} className="close-btn">
@@ -8,7 +10,7 @@ export default function PopUp({ trigger, onClose, data }) {
       </p>
       <div className="pop-up-graph">
         <ForceGraph3D
-          graphData={data}
+          graphData={GenerateSubgraph(node)}
           nodeId="key"
           nodeLabel={(node) => node.attributes.label}
           nodeAutoColorBy={(node) => node.attributes.modularity_class}

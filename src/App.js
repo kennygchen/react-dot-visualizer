@@ -11,12 +11,13 @@ import * as THREE from "three";
 function Output({ input }) {
   const fgRef = useRef();
   const NODE_R = 6;
+  // const [mainData, setMainData] = useState(null);
   const [highlightNodes, setHighlightNodes] = useState(new Set());
   const [highlightLinks, setHighlightLinks] = useState(new Set());
   const [hoverNode, setHoverNode] = useState(null);
   const [clickNode, setClickNode] = useState(null);
   const [popUp, setPopUp] = useState(false);
-  const [subgraphData, setSubgraphData] = useState();
+  const [subgraphNode, setSubgraphNode] = useState();
 
   const data = useMemo(() => {
     const gData = input;
@@ -36,20 +37,19 @@ function Output({ input }) {
       target.links.push(link);
     });
 
-    var memoryObjects = {};
+    // var memoryObjects = {};
 
-    gData.nodes.forEach((node) => {
-      const memoryObjectKey = node.attributes.MemoryObject;
-      if (memoryObjectKey !== "null") {
-        !memoryObjects[memoryObjectKey] && (memoryObjects[memoryObjectKey] = []);
-        memoryObjects[memoryObjectKey].push(node);
-      }
-    });
+    // gData.nodes.forEach((node) => {
+    //   const memoryObjectKey = node.attributes.MemoryObject;
+    //   if (memoryObjectKey !== "null") {
+    //     !memoryObjects[memoryObjectKey] && (memoryObjects[memoryObjectKey] = []);
+    //     memoryObjects[memoryObjectKey].push(node);
+    //   }
+    // });
 
-    GenerateSubgraph(gData, memoryObjects);
-
+    // GenerateSubgraph(memoryObjects);
     return gData;
-  }, []);
+  }, [input]);
 
   const updateHighlight = () => {
     setHighlightNodes(highlightNodes);
@@ -71,8 +71,8 @@ function Output({ input }) {
   const handleNodeClick = (node) => {
     setClickNode(node);
     if (node.attributes.MemoryObject !== "null") {
+      setSubgraphNode(node);
       setPopUp(true);
-      setSubgraphData(node.subgraph);
       fgRef.current.pauseAnimation();
     }
   };
@@ -129,7 +129,7 @@ function Output({ input }) {
         onNodeClick={handleNodeClick}
         onNodeRightClick={handleNodeRightClick}
       />
-      <PopUp trigger={popUp} onClose={handleOnClose} data={subgraphData} />
+      <PopUp trigger={popUp} onClose={handleOnClose} node={subgraphNode} />
     </div>
   );
 }
