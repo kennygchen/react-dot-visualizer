@@ -11,7 +11,6 @@ import * as THREE from "three";
 function Output({ input }) {
   const fgRef = useRef();
   const NODE_R = 6;
-  // const [mainData, setMainData] = useState(null);
   const [highlightNodes, setHighlightNodes] = useState(new Set());
   const [highlightLinks, setHighlightLinks] = useState(new Set());
   const [hoverNode, setHoverNode] = useState(null);
@@ -36,20 +35,6 @@ function Output({ input }) {
       source.links.push(link);
       target.links.push(link);
     });
-
-    // var memoryObjects = {};
-
-    // gData.nodes.forEach((node) => {
-    // console.log(node);
-    // node.__threeObj.children = [node];
-    // const memoryObjectKey = node.attributes.MemoryObject;
-    // if (memoryObjectKey !== "null") {
-    //   !memoryObjects[memoryObjectKey] && (memoryObjects[memoryObjectKey] = []);
-    //   memoryObjects[memoryObjectKey].push(node);
-    // }
-    // });
-
-    // GenerateSubgraph(memoryObjects);
     return gData;
   }, [input]);
 
@@ -112,7 +97,7 @@ function Output({ input }) {
           node.attributes.MemoryObject !== "null"
             ? new THREE.Mesh(
                 new THREE.BoxGeometry(15, 15, 15),
-                new THREE.MeshStandardMaterial({
+                new THREE.MeshLambertMaterial({
                   color: node.color,
                   transparent: true,
                   opacity: 0.75,
@@ -131,7 +116,12 @@ function Output({ input }) {
         onNodeClick={handleNodeClick}
         onNodeRightClick={handleNodeRightClick}
       />
-      <PopUp trigger={popUp} onClose={handleOnClose} node={subgraphNode} />
+      <PopUp
+        trigger={popUp}
+        onClose={handleOnClose}
+        node={subgraphNode}
+        onNodeClick={setClickNode}
+      />
     </div>
   );
 }
