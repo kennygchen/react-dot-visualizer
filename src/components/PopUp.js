@@ -3,6 +3,7 @@ import genRandomTree from "../datasets/random-data";
 import GenerateSubgraph from "./GenerateSubgraph";
 
 export default function PopUp({ trigger, onClose, node }) {
+  console.log(node);
   return trigger ? (
     <div className="pop-up-container">
       <p onClick={onClose} className="close-btn">

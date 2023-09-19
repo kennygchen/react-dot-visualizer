@@ -40,11 +40,13 @@ function Output({ input }) {
     // var memoryObjects = {};
 
     // gData.nodes.forEach((node) => {
-    //   const memoryObjectKey = node.attributes.MemoryObject;
-    //   if (memoryObjectKey !== "null") {
-    //     !memoryObjects[memoryObjectKey] && (memoryObjects[memoryObjectKey] = []);
-    //     memoryObjects[memoryObjectKey].push(node);
-    //   }
+    // console.log(node);
+    // node.__threeObj.children = [node];
+    // const memoryObjectKey = node.attributes.MemoryObject;
+    // if (memoryObjectKey !== "null") {
+    //   !memoryObjects[memoryObjectKey] && (memoryObjects[memoryObjectKey] = []);
+    //   memoryObjects[memoryObjectKey].push(node);
+    // }
     // });
 
     // GenerateSubgraph(memoryObjects);
