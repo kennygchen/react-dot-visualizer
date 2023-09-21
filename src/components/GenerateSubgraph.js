@@ -37,6 +37,7 @@ export default function GenerateSubgraph(node) {
 
     for (const link of linksSet) {
       const linkCopy = {
+        key: link.key,
         source: link.source.key,
         target: link.target.key,
         color: link.color,

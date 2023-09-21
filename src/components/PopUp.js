@@ -8,7 +8,7 @@ export default function PopUp({
   trigger,
   onClose,
   node,
-  onNodeClick,
+  onClick,
   onNodeHover,
   onLinkHover,
   highlightLinks,
@@ -44,8 +44,9 @@ export default function PopUp({
           linkDirectionalParticleWidth={(link) => (highlightLinks.has(link) ? 2 : 0)}
           linkDirectionalParticleSpeed={0.0025}
           onNodeHover={onNodeHover}
-          onNodeClick={(node) => onNodeClick(node)}
+          onNodeClick={(node) => onClick(node)}
           onLinkHover={onLinkHover}
+          onLinkClick={(link) => onClick(link)}
           width={1250}
           height={750}
           showNavInfo={false}

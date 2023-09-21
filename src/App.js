@@ -15,7 +15,7 @@ function Output({ input }) {
   const [highlightLinks, setHighlightLinks] = useState(new Set());
   const [hoverNode, setHoverNode] = useState(null);
   const [hoverLink, setHoverLink] = useState(null);
-  const [clickNode, setClickNode] = useState(null);
+  const [clicked, setClicked] = useState(null);
   const [popUp, setPopUp] = useState(false);
   const [subgraphNode, setSubgraphNode] = useState();
 
@@ -70,7 +70,7 @@ function Output({ input }) {
   };
 
   const handleNodeClick = (node) => {
-    setClickNode(node);
+    setClicked(node);
     if (node.attributes.MemoryObject !== "null") {
       setSubgraphNode(node);
       setPopUp(true);
@@ -80,7 +80,7 @@ function Output({ input }) {
 
   const handleNodeRightClick = useCallback(
     (node) => {
-      setClickNode(node);
+      setClicked(node);
       const distance = 300;
       const distRatio = 1 + distance / Math.hypot(node.x, node.y, node.z);
       fgRef.current.cameraPosition(
@@ -99,7 +99,7 @@ function Output({ input }) {
 
   return (
     <div className="container">
-      <OverlayInfo node={clickNode} />
+      <OverlayInfo clicked={clicked} />
       <ForceGraph3D
         ref={fgRef}
         graphData={data}
@@ -128,6 +128,7 @@ function Output({ input }) {
         linkWidth={(link) => (highlightLinks.has(link) ? 4 : 1.5)}
         onNodeHover={handleNodeHover}
         onLinkHover={handleLinkHover}
+        onLinkClick={(link) => setClicked(link)}
         onNodeClick={handleNodeClick}
         onNodeRightClick={handleNodeRightClick}
       />
@@ -135,7 +136,7 @@ function Output({ input }) {
         trigger={popUp}
         onClose={handleOnClose}
         node={subgraphNode}
-        onNodeClick={setClickNode}
+        onClick={setClicked}
         onNodeHover={handleNodeHover}
         onLinkHover={handleLinkHover}
         highlightLinks={highlightLinks}
