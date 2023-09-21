@@ -108,7 +108,37 @@ function Output({ input }) {
         nodeRelSize={NODE_R}
         nodeAutoColorBy={(node) => node.attributes.modularity_class}
         nodeThreeObject={(node) =>
-          node.attributes.MemoryObject !== "null"
+          node === hoverNode && node.attributes.MemoryObject !== "null"
+            ? new THREE.Mesh(
+                new THREE.BoxGeometry(15, 15, 15),
+                new THREE.MeshLambertMaterial({
+                  color: node.color,
+                  transparent: false,
+                  // opacity: 0.75,
+                  emissive: "#ababab",
+                })
+              )
+            : highlightNodes.has(node) && node.attributes.MemoryObject !== "null"
+            ? new THREE.Mesh(
+                new THREE.BoxGeometry(15, 15, 15),
+                new THREE.MeshLambertMaterial({
+                  color: node.color,
+                  transparent: false,
+                  // opacity: 0.75,
+                  emissive: "#ababab",
+                })
+              )
+            : node === hoverNode
+            ? new THREE.Mesh(
+                new THREE.SphereGeometry(6, 8, 8),
+                new THREE.MeshLambertMaterial({
+                  color: node.color,
+                  transparent: false,
+                  // opacity: 0.75,
+                  emissive: "#ababab",
+                })
+              )
+            : node.attributes.MemoryObject !== "null"
             ? new THREE.Mesh(
                 new THREE.BoxGeometry(15, 15, 15),
                 new THREE.MeshLambertMaterial({
@@ -116,6 +146,16 @@ function Output({ input }) {
                   transparent: true,
                   opacity: 0.75,
                   emissive: "#a1a1a1",
+                })
+              )
+            : highlightNodes.has(node)
+            ? new THREE.Mesh(
+                new THREE.SphereGeometry(6, 8, 8),
+                new THREE.MeshLambertMaterial({
+                  color: node.color,
+                  transparent: false,
+                  // opacity: 0.75,
+                  emissive: "#ababab",
                 })
               )
             : false

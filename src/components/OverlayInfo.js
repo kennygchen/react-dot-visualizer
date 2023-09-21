@@ -2,7 +2,7 @@ export default function OverlayInfo(clicked) {
   if (!clicked.clicked) {
     return (
       <div className="overlay-container">
-        <div>Left-click: view node info</div>
+        <div>Left-click: view node/link info</div>
         <div>Reft-click: focus on node</div>
       </div>
     );
