@@ -121,6 +121,8 @@ function Output({ input }) {
         onClose={handleOnClose}
         node={subgraphNode}
         onNodeClick={setClickNode}
+        onNodeHover={handleNodeHover}
+        highlightLinks={highlightLinks}
       />
     </div>
   );

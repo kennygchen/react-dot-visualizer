@@ -46,7 +46,23 @@ export default function GenerateSubgraph(node) {
       };
       graph.links.push(linkCopy);
     }
+
+    graph.links.forEach((link) => {
+      const source = graph.nodes.find((node) => node.key === link.source);
+      const target = graph.nodes.find((node) => node.key === link.target);
+
+      !source.neighbors && (source.neighbors = []);
+      !target.neighbors && (target.neighbors = []);
+      source.neighbors.push(target);
+      target.neighbors.push(source);
+      !source.links && (source.links = []);
+      !target.links && (target.links = []);
+      source.links.push(link);
+      target.links.push(link);
+    });
+
     return graph;
   }, [node]);
+
   return subgraph;
 }

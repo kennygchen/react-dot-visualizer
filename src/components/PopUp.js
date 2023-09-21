@@ -2,9 +2,16 @@ import { ForceGraph3D } from "react-force-graph";
 import genRandomTree from "../datasets/random-data";
 import GenerateSubgraph from "./GenerateSubgraph";
 import * as THREE from "three";
-import { useCallback, useMemo } from "react";
+import { useState } from "react";
 
-export default function PopUp({ trigger, onClose, node, onNodeClick }) {
+export default function PopUp({
+  trigger,
+  onClose,
+  node,
+  onNodeClick,
+  onNodeHover,
+  highlightLinks,
+}) {
   return trigger ? (
     <div className="pop-up-container">
       <p onClick={onClose} className="close-btn">
@@ -30,11 +37,12 @@ export default function PopUp({ trigger, onClose, node, onNodeClick }) {
           }
           linkSource="source"
           linkTarget="target"
-          linkWidth={1}
+          linkWidth={(link) => (highlightLinks.has(link) ? 3 : 1)}
           linkAutoColorBy={(link) => link.source}
-          linkDirectionalParticles={3}
-          linkDirectionalParticleWidth={1}
+          linkDirectionalParticles={4}
+          linkDirectionalParticleWidth={(link) => (highlightLinks.has(link) ? 2 : 0)}
           linkDirectionalParticleSpeed={0.0025}
+          onNodeHover={onNodeHover}
           onNodeClick={(node) => onNodeClick(node)}
           width={1250}
           height={750}
