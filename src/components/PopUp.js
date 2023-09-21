@@ -12,6 +12,8 @@ export default function PopUp({
   onNodeHover,
   onLinkHover,
   highlightLinks,
+  highlightNodes,
+  hoverNode,
 }) {
   return trigger ? (
     <div className="pop-up-container">
@@ -24,7 +26,37 @@ export default function PopUp({
           nodeId="key"
           nodeLabel={(node) => node.attributes.label}
           nodeThreeObject={(node) =>
-            node.attributes.MemoryObject !== "null"
+            node === hoverNode && node.attributes.MemoryObject !== "null"
+              ? new THREE.Mesh(
+                  new THREE.BoxGeometry(10, 10, 10),
+                  new THREE.MeshLambertMaterial({
+                    color: node.color,
+                    transparent: false,
+                    // opacity: 0.75,
+                    emissive: "#ababab",
+                  })
+                )
+              : highlightNodes.has(node) && node.attributes.MemoryObject !== "null"
+              ? new THREE.Mesh(
+                  new THREE.BoxGeometry(10, 10, 10),
+                  new THREE.MeshLambertMaterial({
+                    color: node.color,
+                    transparent: false,
+                    // opacity: 0.75,
+                    emissive: "#ababab",
+                  })
+                )
+              : node === hoverNode
+              ? new THREE.Mesh(
+                  new THREE.SphereGeometry(4, 8, 8),
+                  new THREE.MeshLambertMaterial({
+                    color: node.color,
+                    transparent: false,
+                    // opacity: 0.75,
+                    emissive: "#ababab",
+                  })
+                )
+              : node.attributes.MemoryObject !== "null"
               ? new THREE.Mesh(
                   new THREE.BoxGeometry(10, 10, 10),
                   new THREE.MeshLambertMaterial({
@@ -32,6 +64,16 @@ export default function PopUp({
                     transparent: true,
                     opacity: 0.75,
                     emissive: "#a1a1a1",
+                  })
+                )
+              : highlightNodes.has(node)
+              ? new THREE.Mesh(
+                  new THREE.SphereGeometry(4, 8, 8),
+                  new THREE.MeshLambertMaterial({
+                    color: node.color,
+                    transparent: false,
+                    // opacity: 0.75,
+                    emissive: "#ababab",
                   })
                 )
               : false

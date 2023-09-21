@@ -180,6 +180,8 @@ function Output({ input }) {
         onNodeHover={handleNodeHover}
         onLinkHover={handleLinkHover}
         highlightLinks={highlightLinks}
+        highlightNodes={highlightNodes}
+        hoverNode={hoverNode}
       />
     </div>
   );
