@@ -14,6 +14,7 @@ function Output({ input }) {
   const [highlightNodes, setHighlightNodes] = useState(new Set());
   const [highlightLinks, setHighlightLinks] = useState(new Set());
   const [hoverNode, setHoverNode] = useState(null);
+  const [hoverLink, setHoverLink] = useState(null);
   const [clickNode, setClickNode] = useState(null);
   const [popUp, setPopUp] = useState(false);
   const [subgraphNode, setSubgraphNode] = useState();
@@ -52,6 +53,19 @@ function Output({ input }) {
       node.links.forEach((link) => highlightLinks.add(link));
     }
     setHoverNode(node || null);
+    updateHighlight();
+  };
+
+  const handleLinkHover = (link) => {
+    highlightNodes.clear();
+    highlightLinks.clear();
+
+    if (link) {
+      highlightLinks.add(link);
+      highlightNodes.add(link.source);
+      highlightNodes.add(link.target);
+    }
+    setHoverLink(link || null);
     updateHighlight();
   };
 
@@ -111,8 +125,9 @@ function Output({ input }) {
         linkAutoColorBy={(link) => link.source}
         linkDirectionalParticles={4}
         linkDirectionalParticleWidth={(link) => (highlightLinks.has(link) ? 2 : 0)}
-        linkWidth={(link) => (highlightLinks.has(link) ? 3 : 1)}
+        linkWidth={(link) => (highlightLinks.has(link) ? 4 : 1.5)}
         onNodeHover={handleNodeHover}
+        onLinkHover={handleLinkHover}
         onNodeClick={handleNodeClick}
         onNodeRightClick={handleNodeRightClick}
       />
@@ -122,6 +137,7 @@ function Output({ input }) {
         node={subgraphNode}
         onNodeClick={setClickNode}
         onNodeHover={handleNodeHover}
+        onLinkHover={handleLinkHover}
         highlightLinks={highlightLinks}
       />
     </div>
