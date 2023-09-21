@@ -122,7 +122,7 @@ function Output({ input }) {
         }
         linkSource="source"
         linkTarget="target"
-        linkAutoColorBy={(link) => link.source}
+        linkColor={(link) => link.source.color}
         linkDirectionalParticles={4}
         linkDirectionalParticleWidth={(link) => (highlightLinks.has(link) ? 2 : 0)}
         linkWidth={(link) => (highlightLinks.has(link) ? 4 : 1.5)}

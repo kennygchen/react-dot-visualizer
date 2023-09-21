@@ -39,7 +39,7 @@ export default function PopUp({
           linkSource="source"
           linkTarget="target"
           linkWidth={(link) => (highlightLinks.has(link) ? 3 : 1)}
-          linkAutoColorBy={(link) => link.source}
+          linkColor={(link) => link.source.color}
           linkDirectionalParticles={4}
           linkDirectionalParticleWidth={(link) => (highlightLinks.has(link) ? 2 : 0)}
           linkDirectionalParticleSpeed={0.0025}
