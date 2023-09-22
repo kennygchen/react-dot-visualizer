@@ -1,5 +1,5 @@
 import "./App.css";
-// import FileUploader from "./components/FileUploader";
+import FileUploader from "./components/FileUploader";
 import PopUp from "./components/PopUp";
 import GenerateSubgraph from "./components/GenerateSubgraph";
 import OverlayInfo from "./components/OverlayInfo";

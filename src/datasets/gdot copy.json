@@ -1,0 +1,108 @@
+{
+  "nodes": [
+    {
+      "key": "1",
+      "attributes": {
+        "label": "1",
+        "modularity_class": 1,
+        "MemoryObject": "null",
+        "Offset": "null"
+      }
+    },
+    {
+      "key": "2",
+      "attributes": {
+        "label": "2",
+        "modularity_class": 2,
+        "MemoryObject": "null",
+        "Offset": "null"
+      }
+    },
+    {
+      "key": "3",
+      "attributes": {
+        "label": "3",
+        "modularity_class": 3,
+        "MemoryObject": "null",
+        "Offset": "null"
+      }
+    },
+    {
+      "key": "4",
+      "attributes": {
+        "label": "4",
+        "modularity_class": 4,
+        "MemoryObject": "null",
+        "Offset": "null"
+      }
+    },
+    {
+      "key": "5",
+      "attributes": {
+        "label": "5",
+        "modularity_class": 5,
+        "MemoryObject": "null",
+        "Offset": "null"
+      }
+    },
+    {
+      "key": "6",
+      "attributes": {
+        "label": "6",
+        "modularity_class": 6,
+        "MemoryObject": "hello",
+        "Offset": "123"
+      }
+    }
+  ],
+  "links": [
+    {
+      "key": "0",
+      "source": "1",
+      "target": "2",
+      "attributes": {
+        "weight": 1.0
+      }
+    },
+    {
+      "key": "1",
+      "source": "1",
+      "target": "3",
+      "attributes": {
+        "weight": 2.0
+      }
+    },
+    {
+      "key": "2",
+      "source": "1",
+      "target": "4",
+      "attributes": {
+        "weight": 4.0
+      }
+    },
+    {
+      "key": "3",
+      "source": "1",
+      "target": "5",
+      "attributes": {
+        "weight": 3.0
+      }
+    },
+    {
+      "key": "4",
+      "source": "1",
+      "target": "6",
+      "attributes": {
+        "weight": 2.0
+      }
+    },
+    {
+      "key": "5",
+      "source": "6",
+      "target": "2",
+      "attributes": {
+        "weight": 3.0
+      }
+    }
+  ]
+}
